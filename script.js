@@ -1,11 +1,17 @@
+// ================= CONFIGURAÇÃO WHITE LABEL =================
+const CONFIG = {
+    NOME_SISTEMA: "Controle de Encomendas - Gate", // Nome no topo
+    ID_CLIENTE: "banco_dados_gate_v1",             // Mude este ID para cada novo condomínio
+};
+
 // ================= VARIÁVEIS GLOBAIS =================
-let encomendas = JSON.parse(localStorage.getItem('encomendas')) || [];
+let encomendas = JSON.parse(localStorage.getItem(CONFIG.ID_CLIENTE)) || [];
 let selecionadaId = null;
 let canvas, ctx, desenhando = false;
 
 // ================= AGENDA DE MORADORES =================
 const agendaMoradores = {
-   "Gate002": "11994392466",
+    "Gate002": "11994392466",
     "Gate004": "11958649090",
     "Gate007": "11958649090",
     "Gate101": "11979861261",
@@ -349,10 +355,16 @@ const agendaMoradores = {
     "Way1504": "11973905126",
     "Way1505": "11912838165",
     "Way1507": "11947502427",
+    
 };
 
 // ================= INICIALIZAÇÃO =================
 window.onload = () => {
+    // Aplica o nome do sistema no Título e Header
+    document.title = CONFIG.NOME_SISTEMA;
+    const h1 = document.querySelector('header h1');
+    if(h1) h1.innerText = CONFIG.NOME_SISTEMA;
+
     renderizarTabela();
     atualizarDashboard();
     document.getElementById('sala').addEventListener('input', buscarContatoAutomatico);
@@ -361,7 +373,7 @@ window.onload = () => {
 
 // ================= FUNÇÕES DE APOIO =================
 function salvarEAtualizar() {
-    localStorage.setItem('encomendas', JSON.stringify(encomendas));
+    localStorage.setItem(CONFIG.ID_CLIENTE, JSON.stringify(encomendas));
     renderizarTabela();
     atualizarDashboard();
 }
@@ -492,19 +504,11 @@ function renderizarTabela(dados = encomendas) {
     if (!corpo) return;
     corpo.innerHTML = '';
 
-    // LÓGICA DE ORDENAÇÃO PEDIDA
     const ordenados = [...dados].sort((a, b) => {
-        // 1. Por Data (Crescente)
         const dataA = a.data.split('/').reverse().join('');
         const dataB = b.data.split('/').reverse().join('');
         if (dataA !== dataB) return dataA.localeCompare(dataB);
-
-        // 2. Por Torre (Gate primeiro, depois Way)
-        if (a.torre !== b.torre) {
-            return a.torre === "Gate" ? -1 : 1;
-        }
-
-        // 3. Por Sala (Crescente numérica)
+        if (a.torre !== b.torre) return a.torre === "Gate" ? -1 : 1;
         const salaA = parseInt(a.sala.replace(/\D/g, '')) || 0;
         const salaB = parseInt(b.sala.replace(/\D/g, '')) || 0;
         return salaA - salaB;
@@ -530,7 +534,6 @@ function renderizarTabela(dados = encomendas) {
 }
 
 // ================= DETALHES E ASSINATURA =================
-
 function mostrarMultiplosDetalhes(itens) {
     const conteudo = document.getElementById('resultadoConteudo');
     conteudo.innerHTML = `<p style="margin-bottom:10px; font-weight:bold; color:#2563eb;">Exibindo ${itens.length} resultado(s):</p>`;
@@ -629,7 +632,6 @@ function finalizarEntrega() {
 function limparAssinatura() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
 function enviarZapManual(id) { enviarZap(encomendas.find(e => e.id === id), 'chegada'); }
 
-// MODIFICADA: Agora limpa tudo de fato
 function visualizarTudo() {
     document.getElementById('filtroData').value = "";
     document.getElementById('filtroSala').value = "";
@@ -650,7 +652,6 @@ function apagar(id) {
     }
 }
 
-// ================= EXPORTAÇÃO EXCEL (CSV) =================
 function exportarCSV() {
     if (encomendas.length === 0) return alert("Nenhuma mercadoria para exportar.");
     let csv = "\ufeff"; 
