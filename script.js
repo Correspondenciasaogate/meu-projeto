@@ -364,15 +364,25 @@ const agendaMoradores = {
 
 // ================= INICIALIZAÇÃO =================
 window.onload = () => {
-    // Aplica o nome do sistema no Título e Header
+    // 1. Aplica o nome
     document.title = CONFIG.NOME_SISTEMA;
     const h1 = document.querySelector('header h1');
     if(h1) h1.innerText = CONFIG.NOME_SISTEMA;
 
+    // 2. FORÇA A COR (A Mágica)
+    // Tenta pelo método das variáveis CSS
+    document.documentElement.style.setProperty('--cor-primaria', CONFIG.COR_PRIMARIA);
+    
+    // Tenta pintar o Header diretamente (Força Bruta)
+    const header = document.querySelector('header');
+    if(header) {
+        header.style.backgroundColor = CONFIG.COR_PRIMARIA;
+        header.style.color = "white"; // Garante que o texto fique branco
+    }
+
+    // 3. Inicializa o restante
     renderizarTabela();
     atualizarDashboard();
-    document.getElementById('sala').addEventListener('input', buscarContatoAutomatico);
-    document.getElementById('torre').addEventListener('change', buscarContatoAutomatico);
 };
 
 // ================= FUNÇÕES DE APOIO =================
@@ -673,5 +683,6 @@ function exportarCSV() {
     link.click();
     document.body.removeChild(link);
 }
+
 
 
