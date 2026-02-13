@@ -1,7 +1,9 @@
 // ================= CONFIGURAÇÃO WHITE LABEL =================
 const CONFIG = {
-    NOME_SISTEMA: "Controle de Encomendas - Gate", // Nome no topo
-    ID_CLIENTE: "banco_dados_gate_v1",             // Mude este ID para cada novo condomínio
+    NOME_SISTEMA: "Sistema de Encomendas", // Ou o nome que preferir
+    ID_CLIENTE: "banco_dados_teste_v1",           // Mantenha o ID para não perder os dados de teste
+    COR_PRIMARIA: "#16a34a",                       // Este é o VERDE que você gostou
+    COR_SECUNDARIA: "#64748b"                      // Cinza elegante para botões secundários
 };
 
 // ================= VARIÁVEIS GLOBAIS =================
@@ -671,4 +673,5 @@ function exportarCSV() {
     link.click();
     document.body.removeChild(link);
 }
+
 
