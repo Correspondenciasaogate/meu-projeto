@@ -1,6 +1,8 @@
 /* ================= VARIÁVEIS E BASE ================= */
 :root {
-    --primary: #2563eb;
+    /* Nomes padronizados para o JavaScript encontrar */
+    --cor-primaria: #2563eb; 
+    --cor-secundaria: #64748b;
     --success: #16a34a;
     --warning: #f59e0b;
     --bg: #f8fafc;
@@ -16,6 +18,18 @@ body {
     margin: 0; 
     padding: 15px; 
 }
+
+/* Estilização do Header (Estava faltando no seu código) */
+header {
+    background-color: var(--cor-primaria);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    margin-bottom: 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+header h1 { margin: 0; font-size: 1.5rem; }
 
 /* ================= LAYOUT PRINCIPAL ================= */
 main {
@@ -47,7 +61,7 @@ main {
     padding: 15px; 
     border-radius: 8px; 
     text-align: center; 
-    border-bottom: 4px solid var(--primary); 
+    border-bottom: 4px solid var(--cor-primaria); 
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .card h3 { margin: 0; font-size: 0.9rem; color: #64748b; text-transform: uppercase; }
@@ -68,16 +82,16 @@ input, select {
     padding: 12px; 
     border: 1px solid #e2e8f0; 
     border-radius: 6px; 
-    font-size: 16px; /* Evita zoom automático no iPhone */
+    font-size: 16px; 
 }
 
 input:focus, select:focus {
-    outline: 2px solid #2563eb33;
-    border-color: var(--primary);
+    outline: 2px solid rgba(37, 99, 235, 0.2);
+    border-color: var(--cor-primaria);
 }
 
 .btn-principal { 
-    background: var(--primary); 
+    background: var(--cor-primaria); 
     color: white; 
     border: none; 
     padding: 14px; 
@@ -90,7 +104,7 @@ input:focus, select:focus {
 .btn-principal:hover { filter: brightness(0.9); }
 
 .btn-secundario { 
-    background: #64748b; 
+    background: var(--cor-secundaria); 
     color: white; 
     border: none; 
     padding: 10px; 
@@ -100,7 +114,7 @@ input:focus, select:focus {
 
 /* ================= TABELA DE DADOS ================= */
 .table-responsive {
-    overflow-x: auto; /* Permite scroll lateral no celular */
+    overflow-x: auto; 
     border-radius: 8px;
 }
 
@@ -128,8 +142,9 @@ tr:hover { background: #f8fafc; }
     margin-bottom: 10px;
     border-radius: 8px;
     transition: 0.2s;
+    border-left: 5px solid var(--cor-primaria);
 }
-.card-detalhe-lista h4 { margin-top: 0; color: var(--primary); }
+.card-detalhe-lista h4 { margin-top: 0; color: var(--cor-primaria); }
 .card-detalhe-lista p { margin: 5px 0; font-size: 0.95rem; }
 
 /* ================= ASSINATURA E MÍDIA ================= */
@@ -138,6 +153,7 @@ canvas#canvasAssinatura {
     width: 100%; 
     background: white;
     touch-action: none; 
+    border: 1px dashed #ccc;
     border-radius: 4px;
 }
 
@@ -151,7 +167,7 @@ canvas#canvasAssinatura {
 /* ================= RESPONSIVIDADE (CELULAR) ================= */
 @media (max-width: 1024px) {
     main {
-        grid-template-columns: 1fr; /* Em tablets, vira coluna única */
+        grid-template-columns: 1fr; 
     }
 }
 
@@ -164,7 +180,7 @@ canvas#canvasAssinatura {
     }
     
     .lateral-acoes {
-        order: -1; /* Painel de Detalhes aparece PRIMEIRO no topo */
+        order: -1; 
         position: static;
         margin-bottom: 10px;
     }
@@ -175,7 +191,7 @@ canvas#canvasAssinatura {
     }
 
     #dashboard {
-        grid-template-columns: 1fr; /* Cards de contagem um sob o outro */
+        grid-template-columns: 1fr; 
     }
     
     .filtros-grid {
@@ -183,3 +199,4 @@ canvas#canvasAssinatura {
         grid-template-columns: 1fr 1fr;
     }
 }
+
