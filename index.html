@@ -3,92 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Encomendas</title>
+    <title>Sistema de Encomendas G&W - Verde</title>
     <style>
         :root {
-            --cor-primaria: #16a34a;
-            --cor-secundaria: #64748b;
+            --verde-escuro: #166534;
+            --verde-primario: #16a34a;
+            --verde-claro: #dcfce7;
+            --bg-body: #f0fdf4;
         }
-        body { font-family: sans-serif; background: #f4f4f9; margin: 0; padding: 20px; }
-        header { background: var(--cor-primaria); color: white; padding: 1rem; text-align: center; border-radius: 8px; margin-bottom: 20px; }
-        
-        .container { max-width: 900px; margin: auto; }
-        
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h3 { margin-top: 0; color: #333; }
 
-        .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full-width { grid-column: span 2; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg-body); margin: 0; padding: 20px; color: #1e293b; }
+        .container { max-width: 1100px; margin: auto; }
         
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        header { background: var(--verde-primario); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid var(--verde-escuro); }
         
-        /* Destaque para o telefone automático */
-        #telefone { background-color: #f0fdf4; font-weight: bold; color: #16a34a; }
+        .grid-main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 850px) { .grid-main { grid-template-columns: 1fr; } }
 
-        button { background: var(--cor-primaria); color: white; border: none; padding: 12px; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
-        button:hover { opacity: 0.9; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--verde-primario); }
+        h3 { margin-top: 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; color: var(--verde-escuro); }
 
-        .stats { display: flex; gap: 10px; margin-bottom: 20px; }
-        .stat-item { flex: 1; background: white; padding: 15px; border-radius: 8px; text-align: center; border-bottom: 4px solid var(--cor-primaria); }
+        .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .full { grid-column: span 2; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #374151; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #bbf7d0; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem; }
+        
+        input:focus, select:focus { border-color: var(--verde-primario); outline: none; box-shadow: 0 0 0 2px var(--verde-claro); }
 
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
-        th { background: #f8fafc; }
-        tr:hover { background: #f1f5f9; cursor: pointer; }
+        #telefone { background-color: var(--verde-claro); font-weight: bold; color: var(--verde-escuro); }
+
+        button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
+        .btn-save { background: var(--verde-primario); color: white; width: 100%; padding: 12px; margin-top: 10px; font-size: 1rem; }
+        .btn-save:hover { background: var(--verde-escuro); }
+
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
+        .btn-limpar { background: #e2e8f0; color: #475569; padding: 8px; width: 100%; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
+        th { background: #f0fdf4; text-align: left; padding: 12px; color: var(--verde-escuro); border-bottom: 2px solid #bbf7d0; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+        .pendente { background: #fef3c7; color: #92400e; }
+        .retirado { background: var(--verde-claro); color: var(--verde-escuro); }
+        
+        .btn-acao { background: none; font-size: 1.2rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>Sistema de Encomendas</h1>
-    </header>
+    <header><h1>🌿 Sistema de Encomendas G&W</h1></header>
 
-    <div class="stats">
-        <div class="stat-item">
-            <small>Hoje</small>
-            <div id="dashTotal" style="font-size: 1.5em; font-weight: bold;">0</div>
+    <div class="grid-main">
+        <div class="card">
+            <h3>📦 Novo Recebimento</h3>
+            <form id="formRecebimento">
+                <div class="form-group">
+                    <div>
+                        <label>Nota Fiscal (NF)</label>
+                        <input type="text" id="notaFiscal" required>
+                    </div>
+                    <div>
+                        <label>Torre</label>
+                        <select id="torre" onchange="buscarContato()">
+                            <option value="Gate">Gate</option>
+                            <option value="Way">Way</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Sala</label>
+                        <input type="text" id="sala" placeholder="Ex: 101" required oninput="buscarContato()">
+                    </div>
+                    <div>
+                        <label>Telefone</label>
+                        <input type="text" id="telefone" readonly placeholder="...">
+                    </div>
+                    <div class="full">
+                        <label>Nome do Destinatário</label>
+                        <input type="text" id="destinatario" required>
+                    </div>
+                    <div class="full">
+                        <button type="submit" class="btn-save">Salvar e Enviar WhatsApp</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="stat-item">
-            <small>Aguardando</small>
-            <div id="dashAguardando" style="font-size: 1.5em; font-weight: bold; color: #f59e0b;">0</div>
-        </div>
-    </div>
 
-    <div class="card">
-        <h3 id="tituloForm">📦 Novo Recebimento</h3>
-        <form id="formRecebimento">
-            <input type="hidden" id="editId">
-            <div class="form-group">
+        <div class="card">
+            <h3>🔍 Filtros de Busca</h3>
+            <div class="filter-grid">
                 <div>
-                    <label>Nota Fiscal</label>
-                    <input type="text" id="notaFiscal" required>
+                    <label>Sala</label>
+                    <input type="text" id="fSala" oninput="filtrar()">
                 </div>
                 <div>
-                    <label>Torre</label>
-                    <select id="torre" onchange="buscarContatoAutomatico()">
-                        <option value="Gate">Gate</option>
-                        <option value="Way">Way</option>
+                    <label>Nome</label>
+                    <input type="text" id="fNome" oninput="filtrar()">
+                </div>
+                <div class="full">
+                    <label>Status</label>
+                    <select id="fStatus" onchange="filtrar()">
+                        <option value="">Todos</option>
+                        <option value="Aguardando retirada">Aguardando</option>
+                        <option value="Retirado">Retirado</option>
                     </select>
                 </div>
-                <div>
-                    <label>Sala (Digite apenas o número)</label>
-                    <input type="text" id="sala" placeholder="Ex: 101" required oninput="buscarContatoAutomatico()">
-                </div>
-                <div>
-                    <label>Telefone (Automático)</label>
-                    <input type="text" id="telefone" placeholder="Aparecerá sozinho">
-                </div>
-                <div class="full-width">
-                    <label>Nome do Destinatário</label>
-                    <input type="text" id="destinatario" required>
-                </div>
-                <div class="full-width">
-                    <button type="submit" id="btnSalvar">Salvar e Enviar WhatsApp</button>
-                </div>
             </div>
-        </form>
+            <button class="btn-limpar" onclick="limparFiltros()">Limpar Filtros</button>
+        </div>
     </div>
 
     <div class="card">
@@ -98,10 +121,11 @@
                 <thead>
                     <tr>
                         <th>Data</th>
-                        <th>Sala</th>
+                        <th>NF</th>
+                        <th>Local</th>
                         <th>Destinatário</th>
                         <th>Status</th>
-                        <th>Ação</th>
+                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="listaCorpo"></tbody>
@@ -110,91 +134,7 @@
     </div>
 </div>
 
-<script>
-// AGENDA DE MORADORES (Baseada na sua lista anterior)
-const agendaMoradores = {
-    "Gate002": "11994392466", "Gate004": "11958649090", "Gate101": "11979861261", "Way101": "3598154110",
-    "Way102": "11966584923", "Gate105": "11971556999", "Way501": "11952369167"
-    // ... adicionei alguns exemplos, você pode completar com a lista gigante acima
-};
-
-let encomendas = JSON.parse(localStorage.getItem('encomendas_v1')) || [];
-
-// FUNÇÃO PRINCIPAL: BUSCA AUTOMÁTICA
-function buscarContatoAutomatico() {
-    const torre = document.getElementById('torre').value;
-    const sala = document.getElementById('sala').value.trim();
-    const campoTelefone = document.getElementById('telefone');
-    
-    // Formata a chave para bater com a agenda (Ex: Gate + 101 = Gate101)
-    const chave = torre + sala;
-    
-    if (agendaMoradores[chave]) {
-        campoTelefone.value = agendaMoradores[chave];
-        campoTelefone.style.backgroundColor = "#dcfce7"; // Verde se achar
-    } else {
-        campoTelefone.value = "";
-        campoTelefone.style.backgroundColor = ""; // Branco se não achar
-    }
-}
-
-// SALVAR ENCOMENDA
-document.getElementById('formRecebimento').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const nova = {
-        id: Date.now(),
-        nf: document.getElementById('notaFiscal').value,
-        torre: document.getElementById('torre').value,
-        sala: document.getElementById('sala').value,
-        destinatario: document.getElementById('destinatario').value,
-        telefone: document.getElementById('telefone').value,
-        data: new Date().toLocaleDateString('pt-BR'),
-        status: 'Aguardando retirada'
-    };
-
-    encomendas.push(nova);
-    localStorage.setItem('encomendas_v1', JSON.stringify(encomendas));
-    
-    // Simula envio de Zap
-    if(nova.telefone) {
-        const msg = `Olá ${nova.destinatario}, sua encomenda NF ${nova.nf} chegou!`;
-        window.open(`https://api.whatsapp.com/send?phone=55${nova.telefone.replace(/\D/g,'')}&text=${encodeURIComponent(msg)}`, '_blank');
-    }
-
-    this.reset();
-    renderizar();
-});
-
-function renderizar() {
-    const corpo = document.getElementById('listaCorpo');
-    corpo.innerHTML = '';
-    
-    encomendas.forEach(item => {
-        corpo.innerHTML += `
-            <tr>
-                <td>${item.data}</td>
-                <td>${item.torre} ${item.sala}</td>
-                <td>${item.destinatario}</td>
-                <td>${item.status}</td>
-                <td><button onclick="apagar(${item.id})" style="padding:5px; background:red;">X</button></td>
-            </tr>
-        `;
-    });
-    
-    document.getElementById('dashTotal').innerText = encomendas.filter(e => e.data === new Date().toLocaleDateString('pt-BR')).length;
-    document.getElementById('dashAguardando').innerText = encomendas.filter(e => e.status === 'Aguardando retirada').length;
-}
-
-function apagar(id) {
-    encomendas = encomendas.filter(e => e.id !== id);
-    localStorage.setItem('encomendas_v1', JSON.stringify(encomendas));
-    renderizar();
-}
-
-// Inicia a tabela ao abrir
-renderizar();
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
+
