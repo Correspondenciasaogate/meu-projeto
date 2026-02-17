@@ -3,136 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Encomendas</title>
-    <style>
-        :root {
-            --cor-primaria: #16a34a; /* Verde solicitado */
-            --cor-secundaria: #64748b;
-        }
-        body { font-family: sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #334155; }
-        .container { max-width: 1200px; margin: auto; }
-        header { background: var(--cor-primaria); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-        
-        /* Dashboard */
-        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
-        .dash-card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .dash-card span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--cor-primaria); }
-
-        .layout { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
-        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
-
-        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        
-        button { background: var(--cor-primaria); color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { opacity: 0.9; }
-
-        /* Tabela */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
-        th { background: #f1f5f9; }
-
-        /* Canvas Assinatura */
-        .canvas-area { border: 2px dashed #cbd5e1; background: #fff; margin-bottom: 10px; }
-        canvas { width: 100%; height: 150px; touch-action: none; cursor: crosshair; }
-    </style>
+    <title>Controle de Encomendas - Gate & Way</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <header><h1>Sistema de Encomendas</h1></header>
+<header>
+    <h1>Controle de Encomendas</h1>
+</header>
 
-    <div class="dashboard">
-        <div class="dash-card">Hoje <span id="dashTotal">0</span></div>
-        <div class="dash-card">Pendentes <span id="dashAguardando">0</span></div>
-        <div class="dash-card">Retirados <span id="dashRetirados">0</span></div>
-    </div>
-
-    <div class="layout">
-        <aside>
-            <div class="card">
-                <h3 id="tituloForm">📦 Novo Recebimento</h3>
-                <form id="formRecebimento">
-                    <input type="hidden" id="editId">
-                    <label>Nota Fiscal</label>
-                    <input type="text" id="notaFiscal" required>
-                    
-                    <label>Torre</label>
-                    <select id="torre">
+<main>
+    <div class="coluna-dados">
+        
+        <div id="blocoRecebimento" class="container">
+            <h2 id="tituloForm">📦 Novo Recebimento</h2>
+            <form id="formRecebimento">
+                <input type="hidden" id="editId">
+                <div class="campo-grupo">
+                    <input type="text" id="notaFiscal" required placeholder="Nota Fiscal">
+                    <select id="torre" required>
+                        <option value="">Torre</option>
                         <option value="Gate">Gate</option>
                         <option value="Way">Way</option>
                     </select>
+                    <input type="text" id="sala" required placeholder="Sala/Apto">
+                </div>
+                <div class="campo-grupo-duplo">
+                    <input type="text" id="destinatario" required placeholder="Nome do Destinatário">
+                    <input type="tel" id="telefone" placeholder="Telefone (Auto-preenchimento)" readonly>
+                </div>
+                <p style="font-size: 0.8em; color: #666; margin-top: 5px;">💡 O telefone é preenchido automaticamente ao digitar a Sala.</p>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" id="btnSalvar" class="btn-principal">Salvar Mercadoria</button>
+                    <button type="button" id="btnCancelarEdit" class="btn-secundario" style="display:none; background:#666; color: white;" onclick="cancelarEdicao()">Cancelar</button>
+                </div>
+            </form>
+        </div>
 
-                    <label>Sala</label>
-                    <input type="text" id="sala" required>
-
-                    <label>Telefone</label>
-                    <input type="text" id="telefone" readonly>
-
-                    <label>Destinatário</label>
-                    <input type="text" id="destinatario" required>
-
-                    <button type="submit" id="btnSalvar">Salvar Mercadoria</button>
-                    <button type="button" id="btnCancelarEdit" style="display:none; background:#64748b;" onclick="cancelarEdicao()">Cancelar</button>
-                </form>
-            </div>
-
-            <div class="card">
-                <h3>🔍 Filtros</h3>
-                <input type="date" id="filtroData" onchange="aplicarFiltros()">
-                <input type="text" id="filtroSala" placeholder="Sala" oninput="aplicarFiltros()">
-                <input type="text" id="filtroNome" placeholder="Nome" oninput="aplicarFiltros()">
-                <input type="text" id="filtroNF" placeholder="Nota Fiscal" oninput="aplicarFiltros()">
+        <div id="secaoFiltros" class="container">
+            <h3>🔍 Filtros e Busca</h3>
+            <div class="filtros-grid">
+                <input type="date" id="filtroData" oninput="aplicarFiltros()">
+                <input type="text" id="filtroSala" placeholder="Filtrar Sala" oninput="aplicarFiltros()">
+                <input type="text" id="filtroNome" placeholder="Filtrar Nome" oninput="aplicarFiltros()">
+                <input type="text" id="filtroNF" placeholder="Filtrar NF" oninput="aplicarFiltros()">
                 <select id="filtroStatus" onchange="aplicarFiltros()">
-                    <option value="">Todos os Status</option>
+                    <option value="">Status: Todos</option>
                     <option value="Aguardando retirada">Aguardando</option>
                     <option value="Retirado">Retirado</option>
                 </select>
-                <button onclick="visualizarTudo()" style="background:#64748b;">Limpar</button>
-                <button onclick="exportarCSV()" style="background:#0f172a;">Exportar CSV</button>
             </div>
-        </aside>
-
-        <main>
-            <div class="card" id="painelDetalhes">
-                <h3>📋 Detalhes e Entrega</h3>
-                <div id="resultadoConteudo">
-                    <p style="color:#94a3b8">Selecione uma encomenda na tabela.</p>
-                </div>
-
-                <div id="blocoConfirmarRetirada" style="display:none; border-top:1px solid #eee; padding-top:15px; margin-top:15px;">
-                    <label>Quem está retirando?</label>
-                    <input type="text" id="nomeRec">
-                    <div class="canvas-area">
-                        <canvas id="canvasAssinatura"></canvas>
-                    </div>
-                    <button onclick="limparAssinatura()" style="background:#ef4444; margin-bottom:5px;">Limpar Assinatura</button>
-                    <button onclick="finalizarEntrega()">Finalizar e Avisar Retirada ✅</button>
-                </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button onclick="visualizarTudo()" class="btn-secundario" style="flex: 1; background: #64748b; color: white;">🧹 Limpar Filtros</button>
+                <button onclick="exportarCSV()" class="btn-secundario" style="flex: 1; background: #0ea5e9; color: white;">📊 Exportar Excel</button>
             </div>
+        </div>
 
-            <div class="card">
-                <h3>📦 Lista Geral</h3>
-                <div style="overflow-x:auto">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>NF</th>
-                                <th>Sala</th>
-                                <th>Torre</th>
-                                <th>Nome</th>
-                                <th>Status</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listaCorpo"></tbody>
-                    </table>
-                </div>
+        <div id="dashboard">
+            <div class="card"><h3>Total Hoje</h3><span id="dashTotal">0</span></div>
+            <div class="card aguardando"><h3>Aguardando</h3><span id="dashAguardando">0</span></div>
+            <div class="card retirados"><h3>Retirados</h3><span id="dashRetirados">0</span></div>
+        </div>
+
+        <div class="container">
+            <h3>📋 Notas Cadastradas (Ordem: Data > Torre > Sala)</h3>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>NF</th>
+                            <th>Sala</th>
+                            <th>Torre</th>
+                            <th>Destinatário</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaCorpo"></tbody>
+                </table>
             </div>
-        </main>
+        </div>
     </div>
-</div>
+
+    <div class="lateral-acoes">
+        <div id="resultadoBusca" class="container">
+            <h3>📌 Detalhes da Seleção</h3>
+            <div id="resultadoConteudo">
+                <p class="placeholder-text">Clique em uma linha da tabela ou use os filtros.</p>
+            </div>
+        </div>
+
+        <div id="blocoConfirmarRetirada" class="container" style="display:none;">
+            <h3 style="color: #15803d; margin-top:0">✅ Confirmar Entrega</h3>
+            <label>Nome de quem está retirando:</label>
+            <input type="text" id="nomeRec" placeholder="Ex: O próprio, Cônjuge, etc" style="width:100%; margin-bottom:10px; padding: 10px; box-sizing: border-box;">
+            
+            <label>Assinatura Digital:</label>
+            <div style="border: 2px dashed #15803d; background: #fff; margin: 10px 0; border-radius: 8px;">
+                <canvas id="canvasAssinatura" width="340" height="150" style="width:100%; cursor: crosshair;"></canvas>
+            </div>
+            
+            <div style="display: flex; gap: 5px;">
+                <button onclick="limparAssinatura()" class="btn-secundario" style="flex: 1; background: #ef4444; color: white;">Limpar</button>
+                <button onclick="finalizarEntrega()" class="btn-principal" style="flex: 2; background: #15803d;">Finalizar e Avisar</button>
+            </div>
+        </div>
+    </div>
+</main>
 
 <script src="script.js"></script>
 </body>
