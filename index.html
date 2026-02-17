@@ -3,138 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Encomendas G&W - Verde</title>
+    <title>Sistema de Encomendas</title>
     <style>
         :root {
+            --cor-primaria: #16a34a;
             --verde-escuro: #166534;
-            --verde-primario: #16a34a;
             --verde-claro: #dcfce7;
             --bg-body: #f0fdf4;
         }
 
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg-body); margin: 0; padding: 20px; color: #1e293b; }
-        .container { max-width: 1100px; margin: auto; }
+        .container { max-width: 1200px; margin: auto; }
         
-        header { background: var(--verde-primario); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: 2px solid var(--verde-escuro); }
+        header { background: var(--cor-primaria); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         
-        .grid-main { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 850px) { .grid-main { grid-template-columns: 1fr; } }
+        /* Dashboard */
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .dash-card { background: white; padding: 15px; border-radius: 10px; text-align: center; border-bottom: 4px solid var(--cor-primaria); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .dash-card span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--cor-primaria); }
 
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--verde-primario); }
-        h3 { margin-top: 0; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; color: var(--verde-escuro); }
+        .grid-main { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
 
-        .form-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .full { grid-column: span 2; }
-        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 5px; color: #374151; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #bbf7d0; border-radius: 6px; box-sizing: border-box; font-size: 0.95rem; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--cor-primaria); }
+        h3 { margin-top: 0; color: var(--verde-escuro); border-bottom: 1px solid #eee; padding-bottom: 10px; }
+
+        label { display: block; font-size: 0.8rem; font-weight: bold; margin: 10px 0 5px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #bbf7d0; border-radius: 6px; box-sizing: border-box; }
         
-        input:focus, select:focus { border-color: var(--verde-primario); outline: none; box-shadow: 0 0 0 2px var(--verde-claro); }
-
-        #telefone { background-color: var(--verde-claro); font-weight: bold; color: var(--verde-escuro); }
-
-        button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; }
-        .btn-save { background: var(--verde-primario); color: white; width: 100%; padding: 12px; margin-top: 10px; font-size: 1rem; }
-        .btn-save:hover { background: var(--verde-escuro); }
-
-        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px; }
-        .btn-limpar { background: #e2e8f0; color: #475569; padding: 8px; width: 100%; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.9rem; }
-        th { background: #f0fdf4; text-align: left; padding: 12px; color: var(--verde-escuro); border-bottom: 2px solid #bbf7d0; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+        button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; padding: 10px; }
+        .btn-principal { background: var(--cor-primaria); color: white; width: 100%; margin-top: 15px; }
+        .btn-principal:hover { background: var(--verde-escuro); }
         
-        .status-badge { padding: 4px 8px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
-        .pendente { background: #fef3c7; color: #92400e; }
-        .retirado { background: var(--verde-claro); color: var(--verde-escuro); }
+        /* Filtros */
+        .filtros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+        /* Tabela */
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
+        th { background: #f8fafc; padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; font-size: 0.85rem; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; cursor: pointer; }
+        tr:hover { background: #f0fdf4; }
+
+        /* Área de Detalhes e Assinatura */
+        #resultadoConteudo { min-height: 100px; }
+        .canvas-container { border: 2px dashed #ccc; margin: 10px 0; background: #fff; touch-action: none; }
+        #canvasAssinatura { width: 100%; height: 150px; cursor: crosshair; }
         
-        .btn-acao { background: none; font-size: 1.2rem; cursor: pointer; }
+        .placeholder-text { color: #94a3b8; text-align: center; padding: 20px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header><h1>🌿 Sistema de Encomendas G&W</h1></header>
+    <header><h1>Sistema de Encomendas</h1></header>
 
-    <div class="grid-main">
-        <div class="card">
-            <h3>📦 Novo Recebimento</h3>
-            <form id="formRecebimento">
-                <div class="form-group">
-                    <div>
-                        <label>Nota Fiscal (NF)</label>
-                        <input type="text" id="notaFiscal" required>
-                    </div>
-                    <div>
-                        <label>Torre</label>
-                        <select id="torre" onchange="buscarContato()">
-                            <option value="Gate">Gate</option>
-                            <option value="Way">Way</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Sala</label>
-                        <input type="text" id="sala" placeholder="Ex: 101" required oninput="buscarContato()">
-                    </div>
-                    <div>
-                        <label>Telefone</label>
-                        <input type="text" id="telefone" readonly placeholder="...">
-                    </div>
-                    <div class="full">
-                        <label>Nome do Destinatário</label>
-                        <input type="text" id="destinatario" required>
-                    </div>
-                    <div class="full">
-                        <button type="submit" class="btn-save">Salvar e Enviar WhatsApp</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div class="card">
-            <h3>🔍 Filtros de Busca</h3>
-            <div class="filter-grid">
-                <div>
-                    <label>Sala</label>
-                    <input type="text" id="fSala" oninput="filtrar()">
-                </div>
-                <div>
-                    <label>Nome</label>
-                    <input type="text" id="fNome" oninput="filtrar()">
-                </div>
-                <div class="full">
-                    <label>Status</label>
-                    <select id="fStatus" onchange="filtrar()">
-                        <option value="">Todos</option>
-                        <option value="Aguardando retirada">Aguardando</option>
-                        <option value="Retirado">Retirado</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn-limpar" onclick="limparFiltros()">Limpar Filtros</button>
-        </div>
+    <div class="dashboard">
+        <div class="dash-card">Entradas Hoje <span id="dashTotal">0</span></div>
+        <div class="dash-card">Aguardando <span id="dashAguardando" style="color: #f59e0b;">0</span></div>
+        <div class="dash-card">Retirados <span id="dashRetirados" style="color: #16a34a;">0</span></div>
     </div>
 
-    <div class="card">
-        <h3>📋 Lista de Encomendas</h3>
-        <div style="overflow-x: auto;">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>NF</th>
-                        <th>Local</th>
-                        <th>Destinatário</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="listaCorpo"></tbody>
-            </table>
-        </div>
+    <div class="grid-main">
+        <aside>
+            <div class="card">
+                <h3 id="tituloForm">📦 Novo Recebimento</h3>
+                <form id="formRecebimento">
+                    <input type="hidden" id="editId">
+                    <label>Nota Fiscal</label>
+                    <input type="text" id="notaFiscal" required>
+                    
+                    <label>Torre</label>
+                    <select id="torre">
+                        <option value="Gate">Gate</option>
+                        <option value="Way">Way</option>
+                    </select>
+
+                    <label>Sala</label>
+                    <input type="text" id="sala" required>
+
+                    <label>Telefone</label>
+                    <input type="text" id="telefone" readonly placeholder="Busca automática...">
+
+                    <label>Nome do Destinatário</label>
+                    <input type="text" id="destinatario" required>
+
+                    <button type="submit" id="btnSalvar" class="btn-principal">Salvar Mercadoria</button>
+                    <button type="button" id="btnCancelarEdit" style="display:none; width:100%; margin-top:5px;" onclick="cancelarEdicao()">Cancelar</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>🔍 Filtros</h3>
+                <div class="filtros-grid">
+                    <input type="date" id="filtroData" onchange="aplicarFiltros()">
+                    <input type="text" id="filtroSala" placeholder="Sala" oninput="aplicarFiltros()">
+                    <input type="text" id="filtroNome" placeholder="Nome" oninput="aplicarFiltros()">
+                    <input type="text" id="filtroNF" placeholder="NF" oninput="aplicarFiltros()">
+                </div>
+                <select id="filtroStatus" onchange="aplicarFiltros()" style="margin-top:10px;">
+                    <option value="">Todos os Status</option>
+                    <option value="Aguardando retirada">Aguardando</option>
+                    <option value="Retirado">Retirado</option>
+                </select>
+                <button class="btn-principal" style="background:#64748b;" onclick="visualizarTudo()">Limpar Filtros</button>
+                <button class="btn-principal" style="background:#020617;" onclick="exportarCSV()">📥 Exportar Excel (CSV)</button>
+            </div>
+        </aside>
+
+        <main>
+            <div class="card">
+                <h3>📋 Detalhes e Retirada</h3>
+                <div id="resultadoConteudo">
+                    <p class="placeholder-text">Selecione uma encomenda na tabela para ver detalhes ou assinar.</p>
+                </div>
+
+                <div id="blocoConfirmarRetirada" style="display: none; border-top: 2px solid #eee; margin-top: 15px; padding-top: 15px;">
+                    <label>Nome de quem está retirando:</label>
+                    <input type="text" id="nomeRec" placeholder="Digite o nome completo">
+                    
+                    <label>Assinatura Digital:</label>
+                    <div class="canvas-container">
+                        <canvas id="canvasAssinatura"></canvas>
+                    </div>
+                    <button onclick="limparAssinatura()" style="background:#ef4444; color:white;">Limpar Desenho</button>
+                    <button onclick="finalizarEntrega()" class="btn-principal">Confirmar Entrega ✅</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📦 Lista de Encomendas</h3>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>NF</th>
+                                <th>Sala</th>
+                                <th>Torre</th>
+                                <th>Nome</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaCorpo"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
 
 <script src="script.js"></script>
 </body>
 </html>
+
 
