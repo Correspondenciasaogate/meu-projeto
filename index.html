@@ -6,50 +6,35 @@
     <title>Sistema de Encomendas</title>
     <style>
         :root {
-            --cor-primaria: #16a34a;
-            --verde-escuro: #166534;
-            --verde-claro: #dcfce7;
-            --bg-body: #f0fdf4;
+            --cor-primaria: #16a34a; /* Verde solicitado */
+            --cor-secundaria: #64748b;
         }
-
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg-body); margin: 0; padding: 20px; color: #1e293b; }
+        body { font-family: sans-serif; background: #f8fafc; margin: 0; padding: 20px; color: #334155; }
         .container { max-width: 1200px; margin: auto; }
-        
-        header { background: var(--cor-primaria); color: white; padding: 20px; border-radius: 12px; text-align: center; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        header { background: var(--cor-primaria); color: white; padding: 20px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
         
         /* Dashboard */
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .dash-card { background: white; padding: 15px; border-radius: 10px; text-align: center; border-bottom: 4px solid var(--cor-primaria); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .dashboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .dash-card { background: white; padding: 15px; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .dash-card span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--cor-primaria); }
 
-        .grid-main { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
-        @media (max-width: 900px) { .grid-main { grid-template-columns: 1fr; } }
+        .layout { display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+        @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
 
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid var(--cor-primaria); }
-        h3 { margin-top: 0; color: var(--verde-escuro); border-bottom: 1px solid #eee; padding-bottom: 10px; }
-
-        label { display: block; font-size: 0.8rem; font-weight: bold; margin: 10px 0 5px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #bbf7d0; border-radius: 6px; box-sizing: border-box; }
+        .card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        input, select, button { width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
         
-        button { cursor: pointer; border: none; border-radius: 6px; font-weight: bold; transition: 0.2s; padding: 10px; }
-        .btn-principal { background: var(--cor-primaria); color: white; width: 100%; margin-top: 15px; }
-        .btn-principal:hover { background: var(--verde-escuro); }
-        
-        /* Filtros */
-        .filtros-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        button { background: var(--cor-primaria); color: white; border: none; font-weight: bold; cursor: pointer; }
+        button:hover { opacity: 0.9; }
 
         /* Tabela */
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; }
-        th { background: #f8fafc; padding: 12px; text-align: left; border-bottom: 2px solid #e2e8f0; font-size: 0.85rem; }
-        td { padding: 12px; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; cursor: pointer; }
-        tr:hover { background: #f0fdf4; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #eee; }
+        th { background: #f1f5f9; }
 
-        /* Área de Detalhes e Assinatura */
-        #resultadoConteudo { min-height: 100px; }
-        .canvas-container { border: 2px dashed #ccc; margin: 10px 0; background: #fff; touch-action: none; }
-        #canvasAssinatura { width: 100%; height: 150px; cursor: crosshair; }
-        
-        .placeholder-text { color: #94a3b8; text-align: center; padding: 20px; }
+        /* Canvas Assinatura */
+        .canvas-area { border: 2px dashed #cbd5e1; background: #fff; margin-bottom: 10px; }
+        canvas { width: 100%; height: 150px; touch-action: none; cursor: crosshair; }
     </style>
 </head>
 <body>
@@ -58,12 +43,12 @@
     <header><h1>Sistema de Encomendas</h1></header>
 
     <div class="dashboard">
-        <div class="dash-card">Entradas Hoje <span id="dashTotal">0</span></div>
-        <div class="dash-card">Aguardando <span id="dashAguardando" style="color: #f59e0b;">0</span></div>
-        <div class="dash-card">Retirados <span id="dashRetirados" style="color: #16a34a;">0</span></div>
+        <div class="dash-card">Hoje <span id="dashTotal">0</span></div>
+        <div class="dash-card">Pendentes <span id="dashAguardando">0</span></div>
+        <div class="dash-card">Retirados <span id="dashRetirados">0</span></div>
     </div>
 
-    <div class="grid-main">
+    <div class="layout">
         <aside>
             <div class="card">
                 <h3 id="tituloForm">📦 Novo Recebimento</h3>
@@ -82,57 +67,53 @@
                     <input type="text" id="sala" required>
 
                     <label>Telefone</label>
-                    <input type="text" id="telefone" readonly placeholder="Busca automática...">
+                    <input type="text" id="telefone" readonly>
 
-                    <label>Nome do Destinatário</label>
+                    <label>Destinatário</label>
                     <input type="text" id="destinatario" required>
 
-                    <button type="submit" id="btnSalvar" class="btn-principal">Salvar Mercadoria</button>
-                    <button type="button" id="btnCancelarEdit" style="display:none; width:100%; margin-top:5px;" onclick="cancelarEdicao()">Cancelar</button>
+                    <button type="submit" id="btnSalvar">Salvar Mercadoria</button>
+                    <button type="button" id="btnCancelarEdit" style="display:none; background:#64748b;" onclick="cancelarEdicao()">Cancelar</button>
                 </form>
             </div>
 
             <div class="card">
                 <h3>🔍 Filtros</h3>
-                <div class="filtros-grid">
-                    <input type="date" id="filtroData" onchange="aplicarFiltros()">
-                    <input type="text" id="filtroSala" placeholder="Sala" oninput="aplicarFiltros()">
-                    <input type="text" id="filtroNome" placeholder="Nome" oninput="aplicarFiltros()">
-                    <input type="text" id="filtroNF" placeholder="NF" oninput="aplicarFiltros()">
-                </div>
-                <select id="filtroStatus" onchange="aplicarFiltros()" style="margin-top:10px;">
+                <input type="date" id="filtroData" onchange="aplicarFiltros()">
+                <input type="text" id="filtroSala" placeholder="Sala" oninput="aplicarFiltros()">
+                <input type="text" id="filtroNome" placeholder="Nome" oninput="aplicarFiltros()">
+                <input type="text" id="filtroNF" placeholder="Nota Fiscal" oninput="aplicarFiltros()">
+                <select id="filtroStatus" onchange="aplicarFiltros()">
                     <option value="">Todos os Status</option>
                     <option value="Aguardando retirada">Aguardando</option>
                     <option value="Retirado">Retirado</option>
                 </select>
-                <button class="btn-principal" style="background:#64748b;" onclick="visualizarTudo()">Limpar Filtros</button>
-                <button class="btn-principal" style="background:#020617;" onclick="exportarCSV()">📥 Exportar Excel (CSV)</button>
+                <button onclick="visualizarTudo()" style="background:#64748b;">Limpar</button>
+                <button onclick="exportarCSV()" style="background:#0f172a;">Exportar CSV</button>
             </div>
         </aside>
 
         <main>
-            <div class="card">
-                <h3>📋 Detalhes e Retirada</h3>
+            <div class="card" id="painelDetalhes">
+                <h3>📋 Detalhes e Entrega</h3>
                 <div id="resultadoConteudo">
-                    <p class="placeholder-text">Selecione uma encomenda na tabela para ver detalhes ou assinar.</p>
+                    <p style="color:#94a3b8">Selecione uma encomenda na tabela.</p>
                 </div>
 
-                <div id="blocoConfirmarRetirada" style="display: none; border-top: 2px solid #eee; margin-top: 15px; padding-top: 15px;">
-                    <label>Nome de quem está retirando:</label>
-                    <input type="text" id="nomeRec" placeholder="Digite o nome completo">
-                    
-                    <label>Assinatura Digital:</label>
-                    <div class="canvas-container">
+                <div id="blocoConfirmarRetirada" style="display:none; border-top:1px solid #eee; padding-top:15px; margin-top:15px;">
+                    <label>Quem está retirando?</label>
+                    <input type="text" id="nomeRec">
+                    <div class="canvas-area">
                         <canvas id="canvasAssinatura"></canvas>
                     </div>
-                    <button onclick="limparAssinatura()" style="background:#ef4444; color:white;">Limpar Desenho</button>
-                    <button onclick="finalizarEntrega()" class="btn-principal">Confirmar Entrega ✅</button>
+                    <button onclick="limparAssinatura()" style="background:#ef4444; margin-bottom:5px;">Limpar Assinatura</button>
+                    <button onclick="finalizarEntrega()">Finalizar e Avisar Retirada ✅</button>
                 </div>
             </div>
 
             <div class="card">
-                <h3>📦 Lista de Encomendas</h3>
-                <div style="overflow-x: auto;">
+                <h3>📦 Lista Geral</h3>
+                <div style="overflow-x:auto">
                     <table>
                         <thead>
                             <tr>
@@ -156,5 +137,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
-
