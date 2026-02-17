@@ -1,11 +1,12 @@
 /* ================= CONFIGURAÇÕES GERAIS ================= */
 :root {
-    --primary-green: #15803d; /* Verde forte */
-    --light-green: #f0fdf4;
-    --accent-gold: #f59e0b;
-    --text-dark: #1e293b;
-    --bg-gray: #f8fafc;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* Tons de Verde Gate */
+    --primary-green: #15803d; /* Verde Floresta */
+    --light-green: #dcfce7;   /* Verde bem clarinho para fundos */
+    --accent-gold: #f59e0b;   /* Dourado para alertas */
+    --text-dark: #064e3b;     /* Texto verde bem escuro */
+    --bg-gray: #f0fdf4;       /* Fundo da tela levemente esverdeado */
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -17,11 +18,12 @@ body {
 }
 
 header {
-    background-color: var(--primary-green);
+    background-color: var(--primary-green) !important;
     color: white;
     padding: 1rem 2rem;
     text-align: center;
     box-shadow: var(--shadow);
+    border-bottom: 4px solid #166534; /* Um verde mais escuro para detalhe */
 }
 
 /* ================= LAYOUT EM COLUNAS ================= */
@@ -87,8 +89,9 @@ input:focus, select:focus {
 #telefone { flex: 1; background-color: #f1f5f9; cursor: not-allowed; }
 
 /* Botões */
+/* Botão principal forçado para Verde */
 .btn-principal {
-    background-color: var(--primary-green);
+    background-color: var(--primary-green) !important;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -98,7 +101,14 @@ input:focus, select:focus {
     flex: 1;
 }
 
-.btn-principal:hover { background-color: #166534; }
+.btn-principal:hover {
+    background-color: #166534 !important;
+}
+
+/* Destaque da linha da tabela ao passar o mouse */
+tr:hover {
+    background-color: #bbf7d0 !important; /* Verde claro ao selecionar */
+}
 
 .btn-secundario {
     border: none;
@@ -187,4 +197,5 @@ tr:hover {
 #canvasAssinatura {
     touch-action: none;
 }
+
 
