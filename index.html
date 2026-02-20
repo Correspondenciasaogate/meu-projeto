@@ -19,6 +19,13 @@
             <h2 id="tituloForm">📦 Novo Recebimento</h2>
             <form id="formRecebimento">
                 <input type="hidden" id="editId">
+                <div style="margin-bottom: 15px;">
+                    <button type="button" onclick="iniciarLeitor()" class="btn-secundario" style="width: 100%; background: #1e293b; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px;">
+                        📷 Ler Código de Barras / QR
+                    </button>
+                    <div id="reader" style="width: 100%; display: none; margin-top: 10px; border-radius: 8px; overflow: hidden; border: 2px solid #15803d;"></div>
+                </div>
+                
                 <div class="campo-grupo">
                     <input type="text" id="notaFiscal" required placeholder="Nota Fiscal">
                     <select id="torre" required>
@@ -30,9 +37,8 @@
                 </div>
                 <div class="campo-grupo-duplo">
                     <input type="text" id="destinatario" required placeholder="Nome do Destinatário">
-                    <input type="tel" id="telefone" placeholder="Telefone (Auto-preenchimento)" readonly>
+                    <input type="tel" id="telefone" placeholder="Telefone (Auto)" readonly>
                 </div>
-                <p style="font-size: 0.8em; color: #666; margin-top: 5px;">💡 O telefone é preenchido automaticamente ao digitar a Sala.</p>
                 <div style="display: flex; gap: 10px;">
                     <button type="submit" id="btnSalvar" class="btn-principal">Salvar Mercadoria</button>
                     <button type="button" id="btnCancelarEdit" class="btn-secundario" style="display:none; background:#666; color: white;" onclick="cancelarEdicao()">Cancelar</button>
@@ -114,7 +120,9 @@
 
 <script src="script.js"></script>
 <button id="btnTopo" onclick="voltarAoTopo()" title="Voltar ao topo">⬆️</button>
+<script src="https://unpkg.com/html5-qrcode"></script>
 </body>
 </html>
+
 
 
