@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controle de Encomendas - Gate & Way</title>
+    <title>Controle de Encomendas </title>
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
 </head>
 <body>
 
@@ -16,18 +14,25 @@
 
 <main>
     <div class="coluna-dados">
+        
         <div id="blocoRecebimento" class="container">
             <h2 id="tituloForm">📦 Novo Recebimento</h2>
             <form id="formRecebimento">
                 <input type="hidden" id="editId">
-                
                 <div style="margin-bottom: 15px;">
                     <button type="button" onclick="iniciarLeitor()" class="btn-secundario" style="width: 100%; background: #1e293b; color: white; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px;">
                         📷 Ler Código de Barras / QR
                     </button>
                     <div id="reader" style="width: 100%; display: none; margin-top: 10px; border-radius: 8px; overflow: hidden; border: 2px solid #15803d;"></div>
                 </div>
+                
+                <div class="campo-grupo">
+    <button type="button" onclick="iniciarLeitor()" style="background: #1e293b; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%;">
+        📷 Ler Código de Barras / QR
+    </button>
+</div>
 
+<div id="reader" style="width: 100%; max-width: 400px; margin: 10px auto; display: none; border-radius: 8px; overflow: hidden;"></div>
                 <div class="campo-grupo">
                     <input type="text" id="notaFiscal" required placeholder="Nota Fiscal">
                     <select id="torre" required>
@@ -39,8 +44,9 @@
                 </div>
                 <div class="campo-grupo-duplo">
                     <input type="text" id="destinatario" required placeholder="Nome do Destinatário">
-                    <input type="tel" id="telefone" placeholder="Telefone (Auto)" readonly>
+                    <input type="tel" id="telefone" placeholder="Telefone (Auto-preenchimento)" readonly>
                 </div>
+                <p style="font-size: 0.8em; color: #666; margin-top: 5px;">💡 O telefone é preenchido automaticamente ao digitar a Sala.</p>
                 <div style="display: flex; gap: 10px;">
                     <button type="submit" id="btnSalvar" class="btn-principal">Salvar Mercadoria</button>
                     <button type="button" id="btnCancelarEdit" class="btn-secundario" style="display:none; background:#666; color: white;" onclick="cancelarEdicao()">Cancelar</button>
@@ -62,8 +68,8 @@
                 </select>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button onclick="visualizarTudo()" class="btn-secundario" style="flex: 1; background: #64748b; color: white;">🧹 Limpar</button>
-                <button onclick="exportarCSV()" class="btn-secundario" style="flex: 1; background: #0ea5e9; color: white;">📊 Exportar</button>
+                <button onclick="visualizarTudo()" class="btn-secundario" style="flex: 1; background: #64748b; color: white;">🧹 Limpar Filtros</button>
+                <button onclick="exportarCSV()" class="btn-secundario" style="flex: 1; background: #0ea5e9; color: white;">📊 Exportar Excel</button>
             </div>
         </div>
 
@@ -74,11 +80,19 @@
         </div>
 
         <div class="container">
-            <h3>📋 Notas Cadastradas</h3>
+            <h3>📋 Notas Cadastradas (Ordem: Data > Torre > Sala)</h3>
             <div class="table-responsive">
                 <table>
                     <thead>
-                        <tr><th>Data</th><th>NF</th><th>Sala</th><th>Torre</th><th>Nome</th><th>Status</th><th>Ações</th></tr>
+                        <tr>
+                            <th>Data</th>
+                            <th>NF</th>
+                            <th>Sala</th>
+                            <th>Torre</th>
+                            <th>Destinatário</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
                     </thead>
                     <tbody id="listaCorpo"></tbody>
                 </table>
@@ -90,32 +104,34 @@
         <div id="resultadoBusca" class="container">
             <h3>📌 Detalhes da Seleção</h3>
             <div id="resultadoConteudo">
-                <p class="placeholder-text">Selecione uma linha ou use os filtros.</p>
+                <p class="placeholder-text">Clique em uma linha da tabela ou use os filtros.</p>
             </div>
         </div>
 
         <div id="blocoConfirmarRetirada" class="container" style="display:none;">
             <h3 style="color: #15803d; margin-top:0">✅ Confirmar Entrega</h3>
-            <label>Quem está retirando:</label>
-            <input type="text" id="nomeRec" placeholder="Ex: O próprio" style="width:100%; margin-bottom:10px; padding: 10px; box-sizing: border-box;">
-            <label>Assinatura:</label>
+            <label>Nome de quem está retirando:</label>
+            <input type="text" id="nomeRec" placeholder="Ex: O próprio, Cônjuge, etc" style="width:100%; margin-bottom:10px; padding: 10px; box-sizing: border-box;">
+            
+            <label>Assinatura Digital:</label>
             <div style="border: 2px dashed #15803d; background: #fff; margin: 10px 0; border-radius: 8px;">
                 <canvas id="canvasAssinatura" width="340" height="150" style="width:100%; cursor: crosshair;"></canvas>
             </div>
+            
             <div style="display: flex; gap: 5px;">
                 <button onclick="limparAssinatura()" class="btn-secundario" style="flex: 1; background: #ef4444; color: white;">Limpar</button>
-                <button onclick="finalizarEntrega()" class="btn-principal">Finalizar</button>
+                <button onclick="finalizarEntrega()" class="btn-principal" style="flex: 2; background: #15803d;">Finalizar e Avisar</button>
             </div>
         </div>
     </div>
 </main>
 
-<button id="btnTopo" onclick="voltarAoTopo()" title="Voltar ao topo">⬆️</button>
-
-<script src="https://unpkg.com/html5-qrcode"></script>
 <script src="script.js"></script>
+<button id="btnTopo" onclick="voltarAoTopo()" title="Voltar ao topo">⬆️</button>
 </body>
+<script src="https://unpkg.com/html5-qrcode"></script>
 </html>
+
 
 
 
